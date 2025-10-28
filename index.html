@@ -42,9 +42,15 @@
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.5); opacity: 0.5; }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
     }
 
     :root {
@@ -570,10 +576,17 @@
       }
     }
     
-    .toast i {
-      font-size: 24px;
+    @keyframes slideUpFade {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .hero {
@@ -801,7 +814,7 @@
       align-items: center;
       background: var(--secondary);
       z-index: 99999;
-      transition: all 0.3s ease-out;
+      transition: all 0.18s ease-out;
       opacity: 1;
       visibility: visible;
     }
@@ -831,7 +844,7 @@
       color: var(--white);
       opacity: 0;
       transform: translateY(20px);
-      animation: slideUpFade 0.3s ease-out forwards;
+      animation: slideUpFade 0.18s ease-out forwards, pulse 2s infinite 1s;
     }
 
     .loader-brand-text span {
@@ -839,7 +852,7 @@
       display: inline-block;
       opacity: 0;
       transform: translateY(20px);
-      animation: slideUpFade 0.3s ease-out forwards 0.1s;
+      animation: slideUpFade 0.18s ease-out forwards 0.05s, pulse 2s infinite 1.05s;
     }
 
     .loader-progress {
@@ -858,7 +871,7 @@
       width: 50%;
       height: 100%;
       background: var(--primary);
-      animation: loading 0.8s linear infinite;
+      animation: loading 1.5s linear infinite;
     }
 
     @keyframes loading {
@@ -1033,28 +1046,28 @@
           return;
         }
 
-        // fade out quickly and remove
-        loader.style.transition = 'opacity 0.25s ease, visibility 0.25s ease';
-        loader.style.opacity = '0';
-        loader.style.visibility = 'hidden';
+          // fade out smoothly and remove
+          loader.style.transition = 'opacity 0.3s ease, visibility 0.3s ease';
+          loader.style.opacity = '0';
+          loader.style.visibility = 'hidden';
 
-        // restore scrolling immediately so page becomes interactive
-        try { document.body.style.overflow = 'auto'; } catch (e) {}
+          // restore scrolling immediately so page becomes interactive
+          try { document.body.style.overflow = 'auto'; } catch (e) {}
 
-        // remove element from DOM after transition to avoid blocking
-        setTimeout(() => {
-          if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
-        }, 300);
+          // remove element from DOM after transition to avoid blocking
+          setTimeout(() => {
+            if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+          }, 300);
       };
 
       // If load already happened, hide immediately. Otherwise hide on load.
       if (document.readyState === 'complete') {
-        // minimal delay so animations (if any) run
-        setTimeout(hideLoader, 80);
+        // Set loader display time to 1 second for already loaded pages
+        setTimeout(hideLoader, 1000);
       } else {
         window.addEventListener('load', () => {
-          // short minimum display so user sees branding but not long enough to block
-          setTimeout(hideLoader, 200);
+          // Set loader display time to 1 second for loading pages
+          setTimeout(hideLoader, 1000);
         }, {once: true});
       }
     })();
